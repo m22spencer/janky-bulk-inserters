@@ -14,11 +14,20 @@ function name_with_quality(name, quality)
 end
 
 function update(input, box, output)
-    input.drop_position = input.position
+    local delta_x = (input.position.x - input.pickup_position.x)
+    local delta_y = (input.position.y - input.pickup_position.y)
 
-    output.pickup_position = output.position
-    output.drop_position = { x = input.position.x + (input.position.x - input.pickup_position.x) * 1.20
-                            , y = input.position.y + (input.position.y - input.pickup_position.y) * 1.20}
+
+    input.drop_position = { x = input.position.x + delta_y * 0.25
+                          , y = input.position.y + delta_x * 0.25 }
+
+
+    output.pickup_position = { x = input.position.x + delta_y * 0.25
+                             , y = input.position.y + delta_x * 0.25 }
+
+
+    output.drop_position = { x = input.position.x + delta_x * 1.2
+                           , y = input.position.y +delta_y * 1.2 }
 end
 
 function create(input) 
