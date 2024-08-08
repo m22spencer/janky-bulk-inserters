@@ -15,7 +15,8 @@ inserter_ent.color = {1, 1, 1, 1}
 local inserter_fake_ent = table.deepcopy(data.raw.inserter["stack-filter-inserter"])
 inserter_fake_ent.name = "janky-bulk-inserter-fake"
 inserter_fake_ent.allow_custom_vectors = true
-inserter_fake_ent.flags = {"placeable-off-grid", "not-on-map", "not-selectable-in-game"}
+inserter_fake_ent.flags = {"placeable-off-grid", "not-on-map", "not-selectable-in-game", "not-deconstructable", "not-blueprintable", "no-copy-paste", "not-upgradable"}
+inserter_fake_ent.selection_box = nil
 
 inserter_fake_ent.collision_mask = {}
 
@@ -40,7 +41,7 @@ local inserter_recipe = {
 local stack_machine = {
     type = "furnace",
     name = "janky-bulk-furnace-fake",
-    flags = {"not-on-map", "not-selectable-in-game", "hidden", "hide-alt-info"},
+    flags = {"not-on-map", "not-selectable-in-game", "hidden", "hide-alt-info", "not-deconstructable", "not-blueprintable", "no-copy-paste", "not-upgradable"},
     crafting_speed = 1000000,
     crafting_categories = {"stacking", "unstacking"},
     result_inventory_size = 1,
