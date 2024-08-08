@@ -28,15 +28,10 @@ else
     inserter_fake_ent.extension_speed = inserter_fake_ent.extension_speed * 1.15
 end
 
-local inserter_recipe = {
-    type = "recipe",
-    name = "janky-bulk-inserter",
-    enabled = true,
-    energy_required = 8, -- time to craft in seconds (at crafting speed 1)
-    ingredients = {{"copper-plate", 200}, {"steel-plate", 50}},
-    result = "janky-bulk-inserter"
-}
+local inserter_recipe = table.deepcopy(data.raw.recipe["stack-filter-inserter"])
 
+inserter_recipe.name   = "janky-bulk-inserter"
+inserter_recipe.result = "janky-bulk-inserter"
 
 local stack_machine = {
     type = "furnace",
