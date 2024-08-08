@@ -30,8 +30,9 @@ end
 
 local inserter_recipe = table.deepcopy(data.raw.recipe["stack-filter-inserter"])
 
-inserter_recipe.name   = "janky-bulk-inserter"
-inserter_recipe.result = "janky-bulk-inserter"
+inserter_recipe.name        = "janky-bulk-inserter"
+inserter_recipe.result      = "janky-bulk-inserter"
+inserter_recipe.ingredients = {{"advanced-circuit", 15}, {"processing-unit", 1}, {"stack-inserter", 1}}
 
 local stack_machine = {
     type = "furnace",
@@ -57,3 +58,19 @@ stack_machine_item.name = "janky-bulk-furnace-fake"
 stack_machine_item.flags = {"hidden"}
 
 data:extend {inserter_item, inserter_ent, inserter_fake_ent, stack_machine, stack_machine_item, inserter_recipe}
+
+
+local tech = table.deepcopy(data.raw.technology['stack-inserter'])
+tech.name = "janky-bulk-inserter"
+tech.effects = {{type = "unlock-recipe", recipe = "janky-bulk-inserter"}}
+tech.prerequisites = {'stack-inserter', 'logistics-3'}
+tech.unit = {
+    ingredients = { {'automation-science-pack', 1}
+                  , {'logistic-science-pack', 1}
+                  , {'chemical-science-pack', 1}
+                  , {'production-science-pack', 1}},
+    time = 15,
+    count = 500
+}
+
+data:extend {tech}
