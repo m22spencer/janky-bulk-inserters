@@ -17,9 +17,7 @@ inserter_fake_ent.name = "janky-bulk-inserter-fake"
 inserter_fake_ent.allow_custom_vectors = true
 inserter_fake_ent.flags = {"placeable-off-grid", "not-on-map", "not-selectable-in-game"}
 
-inserter_fake_ent.collision_box = { { -0.2, -0.2 }, { 0.2, 0.2 } }
 inserter_fake_ent.collision_mask = {}
-inserter_fake_ent.color = {1, 1, 1, 1}
 
 -- Fixes the inserter speed to match the current 1.1 "stack" inserters
 if mods["buffed-inserters"] then

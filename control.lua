@@ -59,7 +59,6 @@ function find(input)
     for _, e in pairs(input.surface.find_entities_filtered{
         area = input.bounding_box
       }) do
-        game.print("Found: " .. e.name)
         if name_without_quality(e.name) == "janky-bulk-inserter-fake" then
             o = e
         end
