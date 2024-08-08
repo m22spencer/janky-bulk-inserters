@@ -7,6 +7,8 @@
 	"homepage": "",
 	"description": "",
 	"dependencies": [
-        "deadlock-beltboxes-loaders >= 2.4.2"
+        "deadlock-beltboxes-loaders >= 2.4.2",
+		"StackInserterRename >= 0.1.2",
+		"FilterInsertersBegone >= 0.1.10"
 	]
 }
