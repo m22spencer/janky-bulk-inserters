@@ -3,41 +3,37 @@
 
 script.on_event(defines.events.on_built_entity, function(ev) 
     local entity = ev.created_entity
-    if entity.name == "express-transport-belt-beltbox" then
+    if entity.name == "janky-bulk-inserter" then
         game.print("On built: " .. entity.type)
 
-        local i = entity.surface.create_entity {
-            name = "janky-bulk-inserter",
-            position = {x = entity.position.x, y = entity.position.y},
-            direction = entity.direction,
+        game.print(entity.pickup_position)
+
+        local i = entity;
+
+        local s = entity.surface.create_entity {
+            name = "janky-bulk-furnace-fake",
+            position = entity.position,
             force = entity.force,
-            fast_replace = "",
-            spill = false,
+            spill = true,
             create_build_effect_smoke = false
         }
-        i.last_user = entity.last_user
-        i.inserter_filter_mode = "blacklist"
-
-        i.drop_target = entity
-        i.pickup_position = { x = i.position.x, y = i.position.y - 1 }
-        i.drop_position =   { x = i.position.x, y = i.position.y}
 
         local o = entity.surface.create_entity {
-            name = "janky-bulk-inserter",
-            position = {x = entity.position.x, y = entity.position.y},
+            name = "janky-bulk-inserter-fake",
+            position = { x = entity.position.x + 0.001, y = entity.position.y + 0.001 },
             direction = entity.direction,
             force = entity.force,
             fast_replace = "",
             spill = false,
             create_build_effect_smoke = false
         }
-        o.last_user = entity.last_user
         o.inserter_filter_mode = "blacklist"
 
-        o.pickup_target = entity
-        o.pickup_position = { x = o.position.x, y = o.position.y }
-        o.drop_position =   { x = o.position.x, y = o.position.y + 1}
+        o.drop_position = i.drop_position
+        i.drop_position = i.position;
+        o.pickup_position = o.position;
 
-
+        o.pickup_target = s
+        i.drop_target = s
     end
 end)
