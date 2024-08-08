@@ -1,0 +1,1 @@
+data.raw.furnace["express-transport-belt-beltbox"].crafting_speed = 1000000
