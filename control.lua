@@ -13,41 +13,96 @@ function name_with_quality(name, quality)
     return level == 1 and name or name .. "-quality-" .. level
 end
 
+function update(input, box, output)
+    input.drop_position = input.position
 
-script.on_event(defines.events.on_built_entity, function(ev) 
-    local entity = ev.created_entity
+    output.pickup_position = output.position
+    output.drop_position = { x = input.position.x + (input.position.x - input.pickup_position.x) * 1.20
+                           , y = input.position.y + (input.position.y - input.pickup_position.y) * 1.20}
+    
+end
 
-    local name = name_without_quality(entity.name)
+function create(input) 
+    local name = name_without_quality(input.name)
 
-    if name == "janky-bulk-inserter" then
-        game.print("On built: " .. entity.type .. " name: " .. name)
+    local i = input;
 
-        local i = entity;
+    local s = input.surface.create_entity {
+        name = "janky-bulk-furnace-fake",
+        position = input.position,
+        force = input.force,
+        spill = true,
+        create_build_effect_smoke = false
+    }
 
-        local s = entity.surface.create_entity {
-            name = "janky-bulk-furnace-fake",
-            position = entity.position,
-            force = entity.force,
-            spill = true,
-            create_build_effect_smoke = false
-        }
+    local o = input.surface.create_entity {
+        name = name_with_quality("janky-bulk-inserter-fake", find_quality(input.name)),
+        position = { x = input.position.x + 0.001, y = input.position.y + 0.001 },
+        direction = input.direction,
+        force = input.force,
+        fast_replace = "",
+        spill = false,
+        create_build_effect_smoke = false
+    }
+    o.inserter_filter_mode = "blacklist"
+    o.pickup_target = s
+    i.drop_target = s
 
-        local o = entity.surface.create_entity {
-            name = name_with_quality("janky-bulk-inserter-fake", find_quality(entity.name)),
-            position = { x = entity.position.x + 0.001, y = entity.position.y + 0.001 },
-            direction = entity.direction,
-            force = entity.force,
-            fast_replace = "",
-            spill = false,
-            create_build_effect_smoke = false
-        }
-        o.inserter_filter_mode = "blacklist"
+    return i,s,o
+end
 
-        o.drop_position = i.drop_position
-        i.drop_position = i.position;
-        o.pickup_position = o.position;
+function find(input)
+    local i = input
+    local s = nil
+    local o = nil
 
-        o.pickup_target = s
-        i.drop_target = s
+    for _, e in pairs(input.surface.find_entities_filtered{
+        area = input.bounding_box
+      }) do
+        game.print("Found: " .. e.name)
+        if name_without_quality(e.name) == "janky-bulk-inserter-fake" then
+            o = e
+        end
+        if name_without_quality(e.name) == "janky-bulk-furnace-fake" then
+            s = e
+        end
     end
-end)
+
+    return i,s,o
+end
+
+
+function on_need_create(ev) 
+    local entity = ev.created_entity or ev.entity
+    if entity then 
+        local name = name_without_quality(entity.name)
+
+        if name == "janky-bulk-inserter" then
+            local i,s,o = create(entity)
+            update(i,s,o)
+        end
+    end
+end
+
+function on_rotate(ev) 
+    local entity = ev.created_entity or ev.entity
+    if entity then 
+        local name = name_without_quality(entity.name)
+
+        if name == "janky-bulk-inserter" then
+            local i,s,o = find(entity)
+            update(i, s, o)
+        end
+    end
+end
+
+script.on_event(defines.events.on_built_entity, on_need_create)
+script.on_event(defines.events.on_robot_built_entity, on_need_create)
+script.on_event(defines.events.script_raised_built, on_need_create)
+script.on_event(defines.events.script_raised_revive, on_need_create)
+script.on_event(defines.events.on_built_entity, on_need_create)
+
+
+script.on_event(defines.events.on_player_rotated_entity, on_rotate)
+
+

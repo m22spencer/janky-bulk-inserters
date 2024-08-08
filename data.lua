@@ -39,7 +39,6 @@ local stack_machine = {
     result_inventory_size = 1,
     source_inventory_size = 1,
     collision_box = {{-0.2, -0.2}, {0.2, 0.2}},
-    selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
     energy_source = {
         type = "electric",
         emissions_per_minute = 15,
