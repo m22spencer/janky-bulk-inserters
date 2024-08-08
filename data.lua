@@ -9,6 +9,7 @@ local inserter_ent = table.deepcopy(data.raw.inserter["stack-inserter"])
 inserter_ent.name = "janky-bulk-inserter"
 inserter_ent.minable.result = "janky-bulk-inserter"
 inserter_ent.allow_custom_vectors = true
+inserter_ent.extension_speed = inserter_ent.extension_speed * 1.15
 
 local inserter_fake_ent = table.deepcopy(data.raw.inserter["stack-inserter"])
 inserter_fake_ent.name = "janky-bulk-inserter-fake"
@@ -17,6 +18,7 @@ inserter_fake_ent.flags = {"placeable-off-grid", "not-on-map", "not-selectable-i
 
 inserter_fake_ent.collision_box = { { -0.2, -0.2 }, { 0.2, 0.2 } }
 inserter_fake_ent.collision_mask = {}
+inserter_fake_ent.extension_speed = inserter_fake_ent.extension_speed * 1.15
 
 local inserter_recipe = {
     type = "recipe",
@@ -47,4 +49,9 @@ local stack_machine = {
     energy_usage = string.format("%dkW", 15),
 }
 
-data:extend {inserter_item, inserter_ent, inserter_fake_ent, stack_machine, inserter_recipe}
+
+local stack_machine_item = table.deepcopy(data.raw.item["stack-inserter"])
+stack_machine_item.name = "janky-bulk-furnace-fake"
+stack_machine_item.flags = {"hidden"}
+
+data:extend {inserter_item, inserter_ent, inserter_fake_ent, stack_machine, stack_machine_item, inserter_recipe}
