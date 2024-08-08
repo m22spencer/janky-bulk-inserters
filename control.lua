@@ -70,9 +70,17 @@ function find(input)
     return i,s,o
 end
 
+
 function on_need_create(ev) 
-    local i,s,o = create(ev.created_entity or ev.entity)
-    update(i,s,o)
+    local entity = ev.created_entity or ev.entity
+    if entity then 
+        local name = name_without_quality(entity.name)
+
+        if name == "janky-bulk-inserter" then
+            local i,s,o = create(entity)
+            update(i,s,o)
+        end
+    end
 end
 
 function on_rotate(ev) 
@@ -88,23 +96,32 @@ function on_rotate(ev)
 end
 
 function on_destroy(ev) 
-    local i,s,o = find(ev.created_entity or ev.entity)
-    s.destroy()
-    o.destroy()
+    local entity = ev.created_entity or ev.entity
+    if entity then 
+        local name = name_without_quality(entity.name)
+
+        if name == "janky-bulk-inserter" then
+            local i,s,o = find(entity)
+            s.destroy()
+            o.destroy()
+        end
+    end
 end
 
-local filter =  {{filter = "name", name = "janky-bulk-inserter"}}
-
-script.on_event(defines.events.on_built_entity, on_need_create, filter)
-script.on_event(defines.events.on_robot_built_entity, on_need_create, filter)
-script.on_event(defines.events.script_raised_built, on_need_create, filter)
-script.on_event(defines.events.script_raised_revive, on_need_create, filter)
+script.on_event(defines.events.on_built_entity, on_need_create)
+script.on_event(defines.events.on_robot_built_entity, on_need_create)
+script.on_event(defines.events.script_raised_built, on_need_create)
+script.on_event(defines.events.script_raised_revive, on_need_create)
+script.on_event(defines.events.on_built_entity, on_need_create)
 
 
 script.on_event(defines.events.on_player_rotated_entity, on_rotate)
 
 
-script.on_event(defines.events.on_player_mined_entity, on_destroy, filter)
-script.on_event(defines.events.on_robot_mined_entity, on_destroy, filter)
-script.on_event(defines.events.on_entity_died, on_destroy, filter)
-script.on_event(defines.events.script_raised_destroy, on_destroy, filter)
+
+
+script.on_event(defines.events.on_player_mined_entity, on_destroy)
+script.on_event(defines.events.on_robot_mined_entity, on_destroy)
+script.on_event(defines.events.on_entity_died, on_destroy)
+script.on_event(defines.events.script_raised_destroy, on_destroy)
+script.on_event(defines.events.on_player_rotated_entity, on_destroy)
